@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>Ana &amp; Ivan | Find Your Seat</title>
+<style>
+:root { color-scheme: dark; --gold:#d8b66a; --muted:#c7c0b1; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; padding:28px 16px 48px; background:radial-gradient(ellipse at top,#29251d 0%,#111 55%); color:#f7f2e8; font-family:Georgia,serif; }
+main { max-width:620px; margin:0 auto; }
+header { text-align:center; padding:24px 12px 26px; }
+.kicker { color:var(--gold); letter-spacing:.28em; font:12px Arial,sans-serif; }
+h1 { margin:14px 0 6px; font-size:clamp(34px,8vw,52px); font-weight:400; letter-spacing:.04em; }
+.date { color:var(--muted); font:13px Arial,sans-serif; letter-spacing:.16em; }
+.card { border:1px solid #8f7543; background:rgba(28,27,25,.94); border-radius:18px; padding:22px; box-shadow:0 14px 40px #0007; }
+h2 { margin:0 0 8px; text-align:center; color:var(--gold); font-size:25px; font-weight:400; }
+.help { text-align:center; color:var(--muted); font:14px/1.5 Arial,sans-serif; margin:0 0 20px; }
+input { width:100%; padding:16px 15px; border-radius:10px; border:1px solid #8f7543; background:#101010; color:#fff; font:16px Arial,sans-serif; outline:none; }
+input:focus { box-shadow:0 0 0 3px #d8b66a33; }
+#results { margin-top:18px; }
+.result { padding:18px; border:1px solid #8f7543; border-radius:12px; text-align:center; background:#141310; margin-bottom:10px; }
+.result .name { font-size:20px; }
+.result .table { margin-top:8px; color:var(--gold); font:bold 22px Arial,sans-serif; }
+.empty { text-align:center; color:var(--muted); font:14px/1.5 Arial,sans-serif; padding:16px 4px; }
+footer { text-align:center; margin-top:22px; color:#9f988b; font:12px Arial,sans-serif; }
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="kicker">THE WEDDING OF</div>
+<h1>Ana &amp; Ivan</h1>
+<div class="date">26 NOVEMBER 2026</div>
+</header>
+<section class="card">
+<h2>Find Your Seat</h2>
+<p class="help">Enter your name below to find your assigned table.</p>
+<input id="search" type="search" placeholder="Type your name…" autocomplete="off" aria-label="Search guest name">
+<div id="results" aria-live="polite"><div class="empty">Start typing your name to see your table.</div></div>
+</section>
+<footer>We’re so happy you’re celebrating with us.</footer>
+</main>
+<script>
+const seating = {"Table 1": ["Mary Jane Laurente", "McJahred Carabio", "Bernadeth McWatt", "Gerwin Carabio", "Liwayway Lupo", "Venerando Lupo", "Marc Luis Salazar", "Hailee Carabio"], "Table 2": ["Jellyn Mae Carabio", "Hachie Anatura-Angul", "Enzo Rachawin Anatura-Angul", "Livie Mea Valencia", "Richmond Valencia", "Aezel Jirah Ayson", "Mikko Carabio", "Queenie Rabanal", "Mark Rabanal"], "Table 3": ["Kent Landicho", "Maribel Landicho", "Howie Richardson", "Mary Grace Monterde", "Jonah Mellorin", "Theressa Mellorin"], "Table 4": ["Conrado Soriano", "Thess Soriano", "Keith Soriano", "Ann Soriano", "Joji Pablico", "Thess Pablico", "Ariel Cruz", "Richel Cruz"], "Table 5": ["Alexa Cruz", "Bryan Pablico", "Mitch Pablico", "Wilma De Vera", "Stephen De Vera", "Aida Hale"]};
+const allGuests = Object.entries(seating).flatMap(([table,names]) => names.map(name => ({name,table})));
+const input = document.getElementById('search');
+const results = document.getElementById('results');
+function render() {
+ const q = input.value.trim().toLocaleLowerCase();
+ if (!q) { results.innerHTML = '<div class="empty">Start typing your name to see your table.</div>'; return; }
+ const matches = allGuests.filter(g => g.name.toLocaleLowerCase().includes(q));
+ if (!matches.length) { results.innerHTML = '<div class="empty">No matching name found. Please check the spelling or ask our usher for help.</div>'; return; }
+ results.innerHTML = matches.map(g => `<div class="result"><div class="name">${g.name}</div><div class="table">${g.table}</div></div>`).join('');
+}
+input.addEventListener('input', render);
+</script>
+</body>
+</html>
